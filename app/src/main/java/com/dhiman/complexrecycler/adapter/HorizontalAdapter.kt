@@ -8,19 +8,35 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.dhiman.complexrecycler.R
-import com.dhiman.complexrecycler.model.*
+import com.dhiman.complexrecycler.adapter.listeners.OnChildListeners
+import com.dhiman.complexrecycler.model.BaseChild
+import com.dhiman.complexrecycler.model.ChildOne
+import com.dhiman.complexrecycler.model.ChildTwo
 
 private const val TYPE_NONE = 0
 private const val TYPE_ONE = TYPE_NONE + 1
 private const val TYPE_TWO = TYPE_ONE + 1
 
-class HorizontalAdapter(private val items: List<BaseChild>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HorizontalAdapter(private val items: List<BaseChild>, private val onChildListeners: OnChildListeners) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
-            TYPE_ONE -> HorizontalViewHolderTypeOne(layoutInflater.inflate(R.layout.adapter_horizontal_item_type_one, parent, false))
-            TYPE_TWO -> HorizontalViewHolderTypeTwo(layoutInflater.inflate(R.layout.adapter_horizontal_item_type_two, parent, false))
+            TYPE_ONE -> HorizontalViewHolderTypeOne(
+                layoutInflater.inflate(
+                    R.layout.adapter_horizontal_item_type_one,
+                    parent,
+                    false
+                ), onChildListeners
+            )
+            TYPE_TWO -> HorizontalViewHolderTypeTwo(
+                layoutInflater.inflate(
+                    R.layout.adapter_horizontal_item_type_two,
+                    parent,
+                    false
+                ), onChildListeners
+            )
             else -> super.createViewHolder(parent, viewType)
         }
     }
@@ -44,7 +60,11 @@ class HorizontalAdapter(private val items: List<BaseChild>): RecyclerView.Adapte
     }
 }
 
-class HorizontalViewHolderTypeOne(itemView: View): RecyclerView.ViewHolder(itemView) {
+abstract class BaseHorizontalViewHolder(itemView: View, val onChildListeners: OnChildListeners) :
+    RecyclerView.ViewHolder(itemView)
+
+class HorizontalViewHolderTypeOne(itemView: View, onChildListeners: OnChildListeners) :
+    BaseHorizontalViewHolder(itemView, onChildListeners) {
     private val card: CardView = itemView.findViewById(R.id.adapter_horizontal_type_one_card)
     private val bodyText: AppCompatTextView = itemView.findViewById(R.id.adapter_horizontal_type_one_text)
 
@@ -60,10 +80,15 @@ class HorizontalViewHolderTypeOne(itemView: View): RecyclerView.ViewHolder(itemV
 
     fun bind(item: ChildOne) {
         bodyText.text = item.toString()
+
+        bodyText.setOnClickListener {
+            onChildListeners.onChildClicked(item)
+        }
     }
 }
 
-class HorizontalViewHolderTypeTwo(itemView: View): RecyclerView.ViewHolder(itemView) {
+class HorizontalViewHolderTypeTwo(itemView: View, onChildListeners: OnChildListeners) :
+    BaseHorizontalViewHolder(itemView, onChildListeners) {
     private val card: CardView = itemView.findViewById(R.id.adapter_horizontal_type_two_card)
     private val bodyText: AppCompatTextView = itemView.findViewById(R.id.adapter_horizontal_type_two_text)
 
@@ -79,5 +104,9 @@ class HorizontalViewHolderTypeTwo(itemView: View): RecyclerView.ViewHolder(itemV
 
     fun bind(item: ChildTwo) {
         bodyText.text = item.toString()
+
+        bodyText.setOnClickListener {
+            onChildListeners.onChildClicked(item)
+        }
     }
 }

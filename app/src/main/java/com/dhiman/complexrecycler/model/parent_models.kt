@@ -1,7 +1,10 @@
 package com.dhiman.complexrecycler.model
 
-sealed class BaseParent(open val id : Int)
 
-data class ParentOne(override val id: Int, val items: List<BaseChild>): BaseParent(id)
+sealed class BaseParent(open val id: Int, open val collapsed: Boolean = true)
 
-data class ParentTwo(override val id: Int, val items: List<BaseChild>): BaseParent(id)
+data class ParentOne(override val id: Int, override val collapsed: Boolean, val items: List<BaseChild>) :
+    BaseParent(id, collapsed)
+
+data class ParentTwo(override val id: Int, override val collapsed: Boolean, val items: List<BaseChild>) :
+    BaseParent(id, collapsed)

@@ -24,6 +24,13 @@
                 style="@style/TextAppearance.AppCompat.Body2"
                 android:layout_margin="8dp"
                 tools:text="@tools:sample/cities"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                tools:srcCompat="@drawable/ic_collapse"
+                android:id="@+id/adapter_vertical_type_two_image"
+                android:layout_gravity="end|center_vertical"/>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
