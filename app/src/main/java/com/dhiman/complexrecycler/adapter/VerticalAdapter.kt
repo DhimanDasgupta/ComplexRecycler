@@ -15,7 +15,6 @@ import com.dhiman.complexrecycler.model.BaseParent
 import com.dhiman.complexrecycler.model.ParentOne
 import com.dhiman.complexrecycler.model.ParentTwo
 
-
 private const val TYPE_NONE = 0
 private const val TYPE_ONE = TYPE_NONE + 1
 private const val TYPE_TWO = TYPE_ONE + 1
