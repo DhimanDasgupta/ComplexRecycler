@@ -20,13 +20,13 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
     private lateinit var recyclerView: RecyclerView
     private lateinit var verticalAdapter: VerticalAdapter
 
-    private lateinit var mainActivityViewModel: MainAcivityViewModel
+    private lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainAcivityViewModel::class.java)
+        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
 
         kenBurnsView = findViewById(R.id.activity_recycler_kb_view)
 

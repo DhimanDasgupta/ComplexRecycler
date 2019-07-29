@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dhiman.complexrecycler.model.*
 
-class MainAcivityViewModel : ViewModel() {
+class MainActivityViewModel : ViewModel() {
     private val list: MutableList<BaseParent> = mutableListOf()
 
     private val mutableListLiveData = MutableLiveData<List<BaseParent>>().also {
