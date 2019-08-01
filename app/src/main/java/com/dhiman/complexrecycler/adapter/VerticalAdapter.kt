@@ -55,6 +55,23 @@ class VerticalAdapter(
         }
     }
 
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val item = differ.currentList[position]
+            if (holder is VerticalViewHolderTypeOne) {
+                holder.bindChange(item = item as ParentOne)
+            } else if (holder is VerticalViewHolderTypeTwo) {
+                holder.bindChange(item = item as ParentTwo)
+            }
+        }
+    }
+
     override fun getItemCount() = differ.currentList.size
 
     override fun getItemViewType(position: Int): Int {
@@ -69,7 +86,7 @@ class VerticalAdapter(
         notifyDataSetChanged()
     }
 
-    companion object {
+    private companion object {
         val diffCallback = object : DiffUtil.ItemCallback<BaseParent>() {
             override fun areItemsTheSame(oldItem: BaseParent, newItem: BaseParent): Boolean {
                 return oldItem == newItem
@@ -77,6 +94,21 @@ class VerticalAdapter(
 
             override fun areContentsTheSame(oldItem: BaseParent, newItem: BaseParent): Boolean {
                 return oldItem.id == newItem.id
+            }
+
+            override fun getChangePayload(oldItem: BaseParent, newItem: BaseParent): Any? {
+                var hasChange = oldItem.items.size != newItem.items.size
+                for (i in 0 until oldItem.items.size) {
+                    hasChange = oldItem.items[i].bookmarked != newItem.items[i].bookmarked
+                    if (hasChange) {
+                        break
+                    }
+                }
+
+                if (hasChange) {
+                    return Any()
+                }
+                return super.getChangePayload(oldItem, newItem)
             }
         }
     }
@@ -104,9 +136,11 @@ class VerticalViewHolderTypeOne(
         CenterLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
 
     init {
-        recyclerView.setRecycledViewPool(viewPool)
+        recyclerView.setRecycledViewPool(this.viewPool)
         recyclerView.layoutManager = layoutManager
         recyclerView.isNestedScrollingEnabled = false
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = HorizontalAdapter(onChildListeners = this.onChildListeners)
 
         val startSnapHelper = StartSnapHelper()
         startSnapHelper.attachToRecyclerView(recyclerView)
@@ -114,7 +148,24 @@ class VerticalViewHolderTypeOne(
 
     fun bind(item: ParentOne) {
         headingText.text = item.toString()
-        recyclerView.adapter = HorizontalAdapter(items = item.items, onChildListeners = onChildListeners)
+        (recyclerView.adapter as HorizontalAdapter).submitList(item.items)
+
+        if (item.collapsed) {
+            collapseImage.setImageResource(R.drawable.ic_expand)
+            recyclerView.visibility = View.GONE
+        } else {
+            collapseImage.setImageResource(R.drawable.ic_collapse)
+            recyclerView.visibility = View.VISIBLE
+        }
+
+        collapseImage.setOnClickListener {
+            onParentListeners.onCollapseExpandClicked(item)
+        }
+    }
+
+    fun bindChange(item: ParentOne) {
+        headingText.text = item.toString()
+        (recyclerView.adapter as HorizontalAdapter).submitList(item.items)
 
         if (item.collapsed) {
             collapseImage.setImageResource(R.drawable.ic_expand)
@@ -144,9 +195,11 @@ class VerticalViewHolderTypeTwo(
         CenterLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
 
     init {
-        recyclerView.setRecycledViewPool(viewPool)
+        recyclerView.setRecycledViewPool(this.viewPool)
         recyclerView.layoutManager = layoutManager
         recyclerView.isNestedScrollingEnabled = false
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = HorizontalAdapter(onChildListeners = this.onChildListeners)
 
         val startSnapHelper = PagerSnapHelper()
         startSnapHelper.attachToRecyclerView(recyclerView)
@@ -154,7 +207,24 @@ class VerticalViewHolderTypeTwo(
 
     fun bind(item: ParentTwo) {
         headingText.text = item.toString()
-        recyclerView.adapter = HorizontalAdapter(items = item.items, onChildListeners = onChildListeners)
+        (recyclerView.adapter as HorizontalAdapter).submitList(item.items)
+
+        if (item.collapsed) {
+            collapseImage.setImageResource(R.drawable.ic_expand)
+            recyclerView.visibility = View.GONE
+        } else {
+            collapseImage.setImageResource(R.drawable.ic_collapse)
+            recyclerView.visibility = View.VISIBLE
+        }
+
+        collapseImage.setOnClickListener {
+            onParentListeners.onCollapseExpandClicked(item)
+        }
+    }
+
+    fun bindChange(item: ParentTwo) {
+        headingText.text = item.toString()
+        (recyclerView.adapter as HorizontalAdapter).submitList(item.items)
 
         if (item.collapsed) {
             collapseImage.setImageResource(R.drawable.ic_expand)

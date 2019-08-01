@@ -7,5 +7,5 @@ interface OnChildInteractionListener
 interface OnChildListeners : OnChildInteractionListener {
     fun onChildClicked(baseChild: BaseChild)
 
-    fun onChildLongClicked(baseChild: BaseChild)
+    fun onToggleBookmark(baseChild: BaseChild)
 }

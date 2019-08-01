@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel : ViewModel() {
@@ -28,10 +29,10 @@ class MainActivityViewModel : ViewModel() {
                             i,
                             false,
                             listOf(
-                                ChildOne(i, "Item $i"),
-                                ChildTwo(i + 1, "Item ${(i + 1)}"),
-                                ChildOne(i + 2, "Item ${(i + 2)}"),
-                                ChildTwo(i + 3, "Item ${(i + 3)}")
+                                ChildOne(i, false, "Item $i"),
+                                ChildTwo(i + 1, false, "Item ${(i + 1)}"),
+                                ChildOne(i + 2, false, "Item ${(i + 2)}"),
+                                ChildTwo(i + 3, false, "Item ${(i + 3)}")
                             )
                         )
                     )
@@ -41,10 +42,10 @@ class MainActivityViewModel : ViewModel() {
                             i,
                             false,
                             listOf(
-                                ChildOne(i + 4, "Item $i"),
-                                ChildTwo(i + 5, "Item ${(i + 1)}"),
-                                ChildOne(i + 6, "Item ${(i + 2)}"),
-                                ChildTwo(i + 7, "Item ${(i + 3)}")
+                                ChildOne(i + 4, false, "Item $i"),
+                                ChildTwo(i + 5, false, "Item ${(i + 1)}"),
+                                ChildOne(i + 6, false, "Item ${(i + 2)}"),
+                                ChildTwo(i + 7, false, "Item ${(i + 3)}")
                             )
                         )
                     )
@@ -65,11 +66,48 @@ class MainActivityViewModel : ViewModel() {
 
     fun onCollapseExpandClicked(baseParent: BaseParent) {
         viewModelScope.launch(Default) {
+            if (isActive) {
+                cancel()
+            }
             val newList = list.map {
                 val collapsed = if (it.id != baseParent.id) it.collapsed else !baseParent.collapsed
                 when (it) {
                     is ParentOne -> it.copy(collapsed = collapsed)
                     is ParentTwo -> it.copy(collapsed = collapsed)
+                }
+            }.toList()
+
+            viewModelScope.launch(Main) {
+                list.clear()
+                list.addAll(newList)
+                mutableListLiveData.postValue(list)
+            }
+        }
+    }
+
+    fun onBookmarkClicked(baseChild: BaseChild) {
+        viewModelScope.launch(Default) {
+            if (isActive) {
+                cancel()
+            }
+            val newList: List<BaseParent> = list.map { it ->
+                if (it.items.contains(baseChild)) {
+                    val child: MutableList<BaseChild> = mutableListOf()
+                    it.items.forEach {
+                        val bookmarked =
+                            if (it.id != baseChild.id) it.bookmarked else !baseChild.bookmarked
+                        when (it) {
+                            is ChildOne -> child.add(it.copy(bookmarked = bookmarked))
+                            is ChildTwo -> child.add(it.copy(bookmarked = bookmarked))
+                        }
+                    }
+
+                    when (it) {
+                        is ParentOne -> it.copy(items = child.toList())
+                        is ParentTwo -> it.copy(items = child.toList())
+                    }
+                } else {
+                    it
                 }
             }.toList()
 

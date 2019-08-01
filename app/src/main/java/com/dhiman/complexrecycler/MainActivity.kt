@@ -67,9 +67,7 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
         Toast.makeText(this, "$baseChild", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onChildLongClicked(baseChild: BaseChild) {
-
+    override fun onToggleBookmark(baseChild: BaseChild) {
+        mainActivityViewModel.onBookmarkClicked(baseChild)
     }
-
-
 }
