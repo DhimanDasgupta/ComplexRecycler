@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
     }
 
     override fun onCollapseExpandClicked(baseParent: BaseParent) {
-        mainActivityViewModel.onCollapseExpandClicked(baseParent)
+        mainActivityViewModel.onCollapseExpandClicked(baseParent, withDelay = false)
 
         Toast.makeText(this, "$baseParent", Toast.LENGTH_SHORT).show()
     }
@@ -68,6 +68,6 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
     }
 
     override fun onToggleBookmark(baseChild: BaseChild) {
-        mainActivityViewModel.onBookmarkClicked(baseChild)
+        mainActivityViewModel.onBookmarkClicked(baseChild, withDelay = false)
     }
 }
