@@ -91,13 +91,7 @@ class MainActivityViewModel : ViewModel() {
             if (isActive) {
                 cancel()
             }
-            val newList = list.map {
-                val collapsed = if (it.id != baseParent.id) it.collapsed else !baseParent.collapsed
-                when (it) {
-                    is ParentOne -> it.copy(collapsed = collapsed)
-                    is ParentTwo -> it.copy(collapsed = collapsed)
-                }
-            }.toList()
+            val newList = list.onCollapseExpandClicked(baseParent)
 
             viewModelScope.launch(Main) {
                 list.clear()
@@ -120,26 +114,8 @@ class MainActivityViewModel : ViewModel() {
             if (isActive) {
                 cancel()
             }
-            val newList: List<BaseParent> = list.map { it ->
-                if (it.items.contains(baseChild)) {
-                    val child: MutableList<BaseChild> = mutableListOf()
-                    it.items.forEach {
-                        val bookmarked =
-                            if (it.id != baseChild.id) it.bookmarked else !baseChild.bookmarked
-                        when (it) {
-                            is ChildOne -> child.add(it.copy(bookmarked = bookmarked))
-                            is ChildTwo -> child.add(it.copy(bookmarked = bookmarked))
-                        }
-                    }
 
-                    when (it) {
-                        is ParentOne -> it.copy(items = child.toList())
-                        is ParentTwo -> it.copy(items = child.toList())
-                    }
-                } else {
-                    it
-                }
-            }.toList()
+            val newList = list.onBookmarkClicked(baseChild)
 
             viewModelScope.launch(Main) {
                 list.clear()
