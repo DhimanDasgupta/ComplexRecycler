@@ -121,10 +121,10 @@ class MainActivityViewModel : ViewModel() {
             }
         }
     }
+}
 
-    companion object MainActivityViewModelFactory : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MainActivityViewModel() as T
-        }
+object MainActivityViewModelFactory : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return MainActivityViewModel() as T
     }
 }

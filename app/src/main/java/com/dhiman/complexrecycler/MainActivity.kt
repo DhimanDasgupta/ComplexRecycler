@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
 
         mainActivityViewModel = ViewModelProvider(
             viewModelStore,
-            MainActivityViewModel.MainActivityViewModelFactory
+            MainActivityViewModelFactory
         ).get(MainActivityViewModel::class.java)
 
         kenBurnsView = findViewById(R.id.activity_recycler_kb_view)
