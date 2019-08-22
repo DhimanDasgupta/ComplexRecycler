@@ -1,9 +1,6 @@
 package com.dhiman.complexrecycler
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.dhiman.complexrecycler.model.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Default
@@ -122,6 +119,12 @@ class MainActivityViewModel : ViewModel() {
                 list.addAll(newList)
                 mutableListLiveData.postValue(list)
             }
+        }
+    }
+
+    companion object MainActivityViewModelFactory : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return MainActivityViewModel() as T
         }
     }
 }

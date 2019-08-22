@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dhiman.complexrecycler.adapter.VerticalAdapter
@@ -26,7 +26,10 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainActivityViewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+        mainActivityViewModel = ViewModelProvider(
+            viewModelStore,
+            MainActivityViewModel.MainActivityViewModelFactory
+        ).get(MainActivityViewModel::class.java)
 
         kenBurnsView = findViewById(R.id.activity_recycler_kb_view)
 
