@@ -16,6 +16,7 @@ import com.dhiman.complexrecycler.adapter.listeners.OnChildListeners
 import com.dhiman.complexrecycler.model.BaseChild
 import com.dhiman.complexrecycler.model.ChildOne
 import com.dhiman.complexrecycler.model.ChildTwo
+import kotlin.math.min
 
 private const val TYPE_NONE = 0
 private const val TYPE_ONE = TYPE_NONE + 1
@@ -126,11 +127,14 @@ class HorizontalViewHolderTypeOne(itemView: View, onChildListeners: OnChildListe
 
     init {
         val displayMetrics = itemView.resources.displayMetrics
-        val width = (displayMetrics.widthPixels * 0.65).toInt()
+        val width = displayMetrics.widthPixels
+        val height = displayMetrics.heightPixels
+
+        val desiredDimension = (min(width, height) * 0.65).toInt()
 
         card.updateLayoutParams {
-            this.width  = width
-            this.height = width
+            this.width = desiredDimension
+            this.height = desiredDimension
         }
     }
 
@@ -169,11 +173,14 @@ class HorizontalViewHolderTypeTwo(itemView: View, onChildListeners: OnChildListe
 
     init {
         val displayMetrics = itemView.resources.displayMetrics
-        val width = (displayMetrics.widthPixels * 0.5).toInt()
+        val width = displayMetrics.widthPixels
+        val height = displayMetrics.heightPixels
+
+        val desiredDimension = (min(width, height) * 0.65).toInt()
 
         card.updateLayoutParams {
-            this.width  = width
-            this.height = width
+            this.width = desiredDimension
+            this.height = desiredDimension
         }
     }
 
