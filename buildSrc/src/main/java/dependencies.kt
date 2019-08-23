@@ -8,6 +8,13 @@ package app.complex.recycler.buildsrc
 
 object Versions {
     //const val ktlint = "0.33.0"
+    const val compileSdkVersion = 29
+    const val buildToolsVersion = "29.0.0"
+    const val applicationId = "com.dhiman.complexrecycler"
+    const val minSdkVersion = 21
+    const val targetSdkVersion = 29
+    const val versionCode = 1
+    const val versionName = "1.0"
 }
 
 object Libs {

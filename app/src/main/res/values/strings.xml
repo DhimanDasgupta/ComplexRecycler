@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Complex Recycler</string>
+    <string name="welcome_text">Hello, how are you?</string>
+    <string name="extra_text">This is a detailed text. I don\'t know why this is used. So we can use this place holder text which is to show some important information</string>
 </resources>
