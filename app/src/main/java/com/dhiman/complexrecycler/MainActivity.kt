@@ -15,9 +15,11 @@ import com.dhiman.complexrecycler.model.BaseParent
 import com.flaviofaria.kenburnsview.KenBurnsView
 
 class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
-    private lateinit var kenBurnsView: KenBurnsView
+    private val kenBurnsView: KenBurnsView
+        get() = findViewById(R.id.activity_recycler_kb_view)
 
-    private lateinit var recyclerView: RecyclerView
+    private val recyclerView: RecyclerView
+        get() = findViewById(R.id.activity_recycler_view)
     private lateinit var verticalAdapter: VerticalAdapter
 
     private lateinit var mainActivityViewModel: MainActivityViewModel
@@ -31,9 +33,6 @@ class MainActivity : AppCompatActivity(), OnParentListeners, OnChildListeners {
             MainActivityViewModelFactory
         ).get(MainActivityViewModel::class.java)
 
-        kenBurnsView = findViewById(R.id.activity_recycler_kb_view)
-
-        recyclerView = findViewById(R.id.activity_recycler_view)
         recyclerView.also {
             it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(it.context, RecyclerView.VERTICAL, false)
